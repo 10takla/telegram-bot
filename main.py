@@ -125,9 +125,16 @@ async def action_to_user(callback_query: CallbackQuery, state: FSMContext):
 async def get_user_by_id(callback_query: CallbackQuery, state: FSMContext):
     user_id = callback_query.data.replace('getUserById_', '')
     await state.update_data(user_id=user_id)
+
+    friend_active = (lambda x: x.get('friend_active', None))(await state.get_data('friend_active'))
+    if friend_active:
+        button_friend = InlineKeyboardButton('Удалить из друзей', callback_data='actToUser_offer_friendship')
+    else:
+        button_friend = InlineKeyboardButton('Добавить в друзья', callback_data='actToUser_offer_friendship')
+
     markup = InlineKeyboardMarkup(inline_keyboard=[[
         InlineKeyboardButton('Отправить сообщение', callback_data='actToUser_send_message'),
-        InlineKeyboardButton('Добавить в друзья', callback_data='actToUser_offer_friendship'),
+        button_friend
     ]])
     await callback_query.message.answer(user_show(user_id), reply_markup=markup)
 
@@ -215,13 +222,17 @@ async def my_profile_menu(callback_query: CallbackQuery, state: FSMContext):
         await callback_query.message.answer(user_show(my_id))
         await state.finish()
     if action == 'friends':
-        # friends = request_mysql(f"SELECT * FROM user WHERE id IN (SELECT id", False)
+        friends = request_mysql(
+            f"SELECT * FROM user WHERE id != {my_id} AND (id IN (SELECT from_id FROM friendship WHERE (from_id = {my_id} OR to_id = {my_id}) AND is_accepted = 1) OR id IN (SELECT to_id FROM friendship WHERE  (from_id = {my_id} OR to_id = {my_id}) AND is_accepted = 1));",
+            False)
         markup = InlineKeyboardMarkup(inline_keyboard=[
             [
-
+                InlineKeyboardButton(f"{friend['first_name']} {friend['last_name']}",
+                                     callback_data=f"getUserById_{friend['id']}") for friend in friends
             ]
         ])
         await callback_query.message.answer("Выберите друга", reply_markup=markup)
+        await state.update_data(friend_active=True)
     if action == 'check_messages':
         users_bd = request_mysql(f"SELECT u.id, u.first_name, u.last_name, COUNT(m.id) as count_messages FROM user u " \
                                  f"JOIN message m ON u.id = m.from_id WHERE u.id = "
