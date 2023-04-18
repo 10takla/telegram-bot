@@ -1,21 +1,21 @@
 import mysql.connector
 from mysql.connector import Error
 
-# устанавливаем соединение с базой данных MySQL
-try:
-    conn = mysql.connector.connect(
-        host='localhost',
-        database='telegram-bot',
-        user='root',
-        password='',
-        port=3307,
-    )
-    if conn.is_connected():
-        print('Connected to MySQL database')
-except Error as e:
-    print(e)
+conn = mysql.connector.connect(
+    host='localhost',
+    database='telegram-bot',
+    user='root',
+    password='',
+    port=3307,
+)
+if conn.is_connected():
+    print('Connected to MySQL database')
 
 cursor = conn.cursor()
+
+def save_mysql(text):
+    cursor.execute(text)
+    conn.commit()
 
 
 def request_mysql(text, one=True):
