@@ -114,11 +114,8 @@ async def get_only_friends(message: types.Message, state: FSMContext):
     user_form["id"] = message.from_user.id
     if registrate(user_form):
         await message.answer("Вы зарегистрированы", reply_markup=ReplyKeyboardRemove())
-        await my_profile(message)
     else:
         await message.answer("Регистрация не прошла")
-        await my_profile(message)
-
 
 def registrate(data):
     keys = list(data.keys())

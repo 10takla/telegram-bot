@@ -23,7 +23,7 @@ def profile_menu(my_id):
         ],
         [
             InlineKeyboardButton(f"Друзья ({count_friends})", callback_data="friends_"),
-            InlineKeyboardButton("О себе", callback_data="profile_about_me"),
+            InlineKeyboardButton("О себе", callback_data="meInfo_"),
         ],
     ])
 

@@ -16,4 +16,5 @@ async def profile_actions(call: CallbackQuery):
         await call.message.edit_text('Уведомления', reply_markup=notifies_menu(call.from_user.id))
         pass
     if action == 'about_me':
+
         pass
