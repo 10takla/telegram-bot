@@ -35,4 +35,4 @@ async def change_do(call: CallbackQuery):
 async def change_me(call: CallbackQuery):
 
 
-    await call.message.answer('Что хотите изменить? ТЫ ПИДОР')
+    await call.message.answer('Что хотите изменить?')
