@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-
+from modules.start_menu import my_profile
 from bd import save_mysql, request_mysql
 from loader import dp
 
@@ -35,6 +35,7 @@ async def send_messages(message: types.Message, state: FSMContext):
         tmp_text = ', '.join([f"('{i}', {my_id}, {user_id})" for i in messages])
         save_mysql(f"INSERT INTO message (text, from_id, to_id) VALUES {tmp_text}")
         await message.answer("Сообщения отправлены", reply_markup=ReplyKeyboardRemove())
+        await my_profile(message)
         await state.finish()
         return
     if text == 'Отменить':

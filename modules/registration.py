@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
-from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from bd import conn, cursor, request_mysql
 from loader import dp
 from modules.start_menu import my_profile
@@ -113,6 +113,7 @@ async def get_only_friends(message: types.Message, state: FSMContext):
     user_form = await state.get_data()
     user_form["id"] = message.from_user.id
     if registrate(user_form):
+        await message.answer("Вы зарегистрированы", reply_markup=ReplyKeyboardRemove())
         await my_profile(message)
     else:
         await message.answer("Регистрация не прошла")
