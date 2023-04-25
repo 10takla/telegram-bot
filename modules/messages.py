@@ -40,6 +40,7 @@ async def send_messages(message: types.Message, state: FSMContext):
         return
     if text == 'Отменить':
         await message.answer("Сообщения отменены", reply_markup=ReplyKeyboardRemove())
+        await my_profile(message)
         await state.finish()
         return
     messages += [text]
