@@ -33,13 +33,6 @@ async def change_do(call: CallbackQuery):
 
 @dp.callback_query_handler(lambda c: c.data.startswith('changeMe_'))
 async def change_me(call: CallbackQuery):
-    my_id = call.from_user.id
-    me_info = user_info(my_id)
-    print(call.message.text)
-    markup = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton("lkllkkl", callback_data="hjg"),
-        ]
-    ])
 
-    await call.message.answer('Что хотите изменить?', reply_markup=markup)
+
+    await call.message.answer('Что хотите изменить? ТЫ ПИДОР')
